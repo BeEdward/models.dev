@@ -3,21 +3,16 @@
 # output rate.
 # Toggle: thinking.type = enabled|disabled; also reasoning.enabled = true|false and
 # reasoning_effort = none (off). Measured on this host 2026-10-02, /v1/chat/completions:
-#   off (reasoning.enabled=false / thinking disabled / reasoning_effort=none, 6 runs): reasoning tokens [0, 0, 0, 0, 0, 0]
-#   effort, short prompt (median of 4): low 177 medium 218 high 183 max 249
-#   effort, 5-person seating puzzle (median of 4): low 1938 (range 1169-4048) high 2303 (range 1954-5438) max 2047 (range 1027-2765)
-#   repeat run, short prompt (median of 4): low 194.5 medium 232.5 high 242.5 max 224; off 6/6 at 0 reasoning tokens
-# No effort list. Host docs, verbatim (https://www.tokenify.dev/llms-full.txt, section
-# "Thinking costs output tokens"): "`reasoning.effort` of "none" or "minimal" means off,
-# and "low", "medium", "high" or "max" means on." and "Every documented `reasoning.effort`
-# is accepted, but thinking is on or off here with nothing in between, so the depth
-# is advisory". So low/medium/high/max all reach the model as the same "on"; the per-level
-# medians above do not order across prompts and their ranges overlap (run-to-run variance).
+#   off (reasoning.enabled=false / thinking disabled / reasoning_effort=none): 18/18 runs at 0 reasoning tokens over three sessions
+# Effort: reasoning_effort is forwarded to the model as sent. Host docs, verbatim
+# (https://www.tokenify.dev/llms-full.txt, section "Thinking costs output tokens"):
+# ""low", "medium", "high" or "max" means on at that depth — the word you send is passed
+# to the model, not just translated into on/off." Values listed are the lab's: high, max.
+#   effort, short prompt (median of 4, measured after the host began forwarding it): low 260 medium 229.5 high 184.5 max 245.5
 # Reasoning is returned in message.reasoning_content when on, absent when off.
 base_model = "deepseek/deepseek-v4-pro-0813"
 
-[[reasoning_options]]
-type = "toggle"
+reasoning_options = [{ type = "toggle" }, { type = "effort", values = ["high", "max"] }]
 
 [interleaved]
 field = "reasoning_content"
