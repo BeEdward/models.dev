@@ -1,16 +1,17 @@
 # Pricing: GET https://api.tokenify.dev/v1/models and https://www.tokenify.dev/pricing/
 # (accessed 2026-10-02), USD per 1M tokens. Reasoning tokens are billed at the
 # output rate.
-# Reasoning control on this host is on/off only: `reasoning: {"enabled": false}`,
-# `thinking: {"type": "disabled"}` or `reasoning_effort: "none"|"minimal"` turn it
-# off. Other `reasoning_effort` values are accepted but do not grade depth
-# (documented in https://www.tokenify.dev/llms-full.txt, measured 2026-10-01),
-# hence a toggle and no effort list.
+# Always reasons on this host, as on the lab API (thinking cannot be disabled).
+# Measured 2026-10-02, /v1/chat/completions:
+#   off (reasoning.enabled=false / thinking disabled / reasoning_effort=none, 6 runs): reasoning tokens [27, 27, 35, 38, 42, 42]
+#   effort, short prompt (median of 4): low 117 medium 116 high 111 max 117
+#   default (reasoning on): [122, 169]
+# The off controls shorten reasoning but never reach zero, so this is not a toggle;
+# effort levels are flat (the host does not forward depth). Hence no caller control.
 # Input modalities narrowed to what this host documents: text and image.
 base_model = "zhipuai/glm-5.3-flash"
 
-[[reasoning_options]]
-type = "toggle"
+reasoning_options = []
 
 [interleaved]
 field = "reasoning_content"

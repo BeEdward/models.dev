@@ -1,11 +1,16 @@
 # Pricing: GET https://api.tokenify.dev/v1/models and https://www.tokenify.dev/pricing/
 # (accessed 2026-10-02), USD per 1M tokens. Reasoning tokens are billed at the
 # output rate.
-# Reasoning control on this host is on/off only: `reasoning: {"enabled": false}`,
-# `thinking: {"type": "disabled"}` or `reasoning_effort: "none"|"minimal"` turn it
-# off. Other `reasoning_effort` values are accepted but do not grade depth
-# (documented in https://www.tokenify.dev/llms-full.txt, measured 2026-10-01),
-# hence a toggle and no effort list.
+# Toggle: thinking.type = enabled|disabled; also reasoning.enabled = true|false and
+# reasoning_effort = none (off). Measured on this host 2026-10-02, /v1/chat/completions:
+#   off (reasoning.enabled=false / thinking disabled / reasoning_effort=none, 6 runs): reasoning tokens [0, 0, 0, 0, 0, 0]
+#   effort, short prompt (median of 4): low 177 medium 218 high 183 max 249
+#   effort, 5-person seating puzzle (median of 4): low 1938 (range 1169-4048) high 2303 (range 1954-5438) max 2047 (range 1027-2765)
+# No effort list: this host translates reasoning_effort/thinking onto a two-valued
+# upstream control and does not forward the depth (https://www.tokenify.dev/llms-full.txt,
+# "Thinking costs output tokens": "the depth is advisory"). The per-level medians above do
+# not order consistently across prompts and their ranges overlap, i.e. run-to-run variance.
+# Reasoning is returned in message.reasoning_content when on, absent when off.
 base_model = "deepseek/deepseek-v4-pro-0813"
 
 [[reasoning_options]]
