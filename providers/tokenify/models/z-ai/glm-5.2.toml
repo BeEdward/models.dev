@@ -10,15 +10,19 @@
 # to the model, not just translated into on/off." Values listed match same-surface peers: high, max.
 #   effort, short prompt (median of 4, measured after the host began forwarding it): low 381 medium 365.5 high 407.5 max 640.5
 # Reasoning is returned in message.reasoning_content when on, absent when off.
+schema = 2
 base_model = "zhipuai/glm-5.2"
 
-reasoning_options = [{ type = "toggle" }, { type = "effort", values = ["high", "max"] }]
+[capabilities]
+reasoning = { supported = true, toggle = true, effort = ["high", "max"] }
 
-[interleaved]
-field = "reasoning_content"
+[api.chat-completions]
+compatibility = { reasoning_field = "reasoning_content" }
 
-[cost]
-input = 0.70
-output = 2.20
+[cost.text.input]
+price = 0.70
+cache = { read = 0.26 }
+
+[cost.text.output]
+price = 2.20
 reasoning = 2.20
-cache_read = 0.26

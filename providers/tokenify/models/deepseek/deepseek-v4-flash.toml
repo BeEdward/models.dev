@@ -11,15 +11,19 @@
 #   effort, short prompt (median of 4, measured after the host began forwarding it): low 183.5 medium 124 high 124 max 170
 #   effort, 5-person seating puzzle (2026-10-02, after forwarding; median and range of 3 runs): low 2501 (1839-3016), max 2539 (2393-6763) — small effect on this model
 # Reasoning is returned in message.reasoning_content when on, absent when off.
+schema = 2
 base_model = "deepseek/deepseek-v4-flash-0731"
 
-reasoning_options = [{ type = "toggle" }, { type = "effort", values = ["low", "high", "max"] }]
+[capabilities]
+reasoning = { supported = true, toggle = true, effort = ["low", "high", "max"] }
 
-[interleaved]
-field = "reasoning_content"
+[api.chat-completions]
+compatibility = { reasoning_field = "reasoning_content" }
 
-[cost]
-input = 0.22
-output = 0.66
+[cost.text.input]
+price = 0.22
+cache = { read = 0.014 }
+
+[cost.text.output]
+price = 0.66
 reasoning = 0.66
-cache_read = 0.014

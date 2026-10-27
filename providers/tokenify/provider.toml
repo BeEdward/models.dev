@@ -7,6 +7,7 @@
 # https://www.tokenify.dev/llms-full.txt (accessed 2026-10-02)
 name = "Tokenify"
 npm = "@ai-sdk/openai-compatible"
+opencodeai = "@opencode/ai/providers/openai-compatible"
 env = ["TOKENIFY_API_KEY"]
 api = "https://api.tokenify.dev/v1"
 doc = "https://www.tokenify.dev/docs/"
